@@ -2,6 +2,7 @@ package com.quarkdown.stdlib
 
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.base.block.Code
+import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.base.inline.CodeSpan
 import com.quarkdown.core.ast.base.inline.LineBreak
 import com.quarkdown.core.ast.base.inline.Link
@@ -25,12 +26,36 @@ import com.quarkdown.core.util.toPlainText
  */
 val Text: QuarkdownModule =
     moduleOf(
+        ::heading,
         ::text,
         ::lineBreak,
         ::code,
         ::codeSpan,
         ::loremIpsum,
     )
+
+/**
+ * Creates a heading with specified text and level.
+ *
+ * @param text inline content of the heading
+ * @param level heading level (e.g., 1 for H1, 2 for H2, etc.)
+ * @param decorative if `true`, the heading is considered decorative and will be treated as unnumbered in the table of contents. Defaults to `false`.
+ * @param customId optional custom identifier for the heading. If not specified, an ID will be generated automatically based on the heading text.
+ * If specified, this ID can be used for cross-referencing this heading elsewhere in the document.
+ */
+@Name("heading")
+fun heading(
+    text: InlineMarkdownContent,
+    @Name("level") level: Int = 1,
+    @Name("decorative") decorative: Boolean = false,
+    @Name("id") customId: String? = null,
+) =
+    Heading(
+        depth = level,
+        text = text.children,
+        isDecorative = decorative,
+        customId = customId,
+    ).wrappedAsValue()
 
 /**
  * Creates an inline text node with specified formatting and transformation.

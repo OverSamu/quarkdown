@@ -93,6 +93,18 @@ class TextTest {
     }
 
     @Test
+    fun `text in headings with heading function`() {
+        // Note: \n\n is required to prevent the lexer from being interpreted as block function calls instead of inline.
+        // TODO: fix this in the future by improving the lexer.
+        execute(".noautopagebreak\n.heading {Title}\n Hello, world!\n\n.heading {Subtitle} level:{2}\nHello, world!") {
+            assertEquals(
+                "<h1>Title</h1><p>Hello, world!</p><h2>Subtitle</h2><p>Hello, world!</p>",
+                it,
+            )
+        }
+    }
+
+    @Test
     fun links() {
         execute("Hello, **world**! [_link_](https://example.com \"title\")") {
             assertEquals(
