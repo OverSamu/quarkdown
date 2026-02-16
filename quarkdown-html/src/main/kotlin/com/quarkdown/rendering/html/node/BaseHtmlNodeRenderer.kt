@@ -41,6 +41,7 @@ import com.quarkdown.core.ast.base.inline.getSubdocument
 import com.quarkdown.core.ast.media.getStoredMedia
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyHeading
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
@@ -398,6 +399,8 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: TableOfContentsHeading): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: TableOfContentsView): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: BibliographyHeading): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: BibliographyView): CharSequence = throw UnsupportedRenderException(node)
 

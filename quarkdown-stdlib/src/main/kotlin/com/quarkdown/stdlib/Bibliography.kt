@@ -1,7 +1,9 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyHeading
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.bibliography.bibtex.BibTeXBibliographyParser
 import com.quarkdown.core.context.MutableContext
@@ -58,11 +60,17 @@ fun bibliography(
     val file = file(context, path)
     val bibliography = BibTeXBibliographyParser.parse(file.reader())
 
-    return BibliographyView(
-        title = title?.children,
-        bibliography = bibliography,
-        style = style.style,
-        isTitleDecorative = decorativeTitle,
+    return AstRoot(
+        listOf(
+            BibliographyHeading(
+                title = title?.children,
+                isDecorative = decorativeTitle,
+            ),
+            BibliographyView(
+                bibliography = bibliography,
+                style = style.style,
+            ),
+        ),
     ).wrappedAsValue()
 }
 

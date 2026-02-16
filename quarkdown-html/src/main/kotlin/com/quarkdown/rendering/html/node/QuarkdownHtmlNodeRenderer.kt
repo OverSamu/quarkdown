@@ -19,6 +19,7 @@ import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyHeading
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.ast.quarkdown.bibliography.createBibliographyHeading
 import com.quarkdown.core.ast.quarkdown.block.Box
@@ -355,23 +356,22 @@ class QuarkdownHtmlNodeRenderer(
         }
     }
 
-    override fun visit(node: BibliographyView) =
-        buildMultiTag {
-            // Title heading. Its content is either the node's user-set title or a default localized one.
-            createBibliographyHeading(node.title, node.isTitleDecorative, context).let { +it }
+    override fun visit(node: BibliographyHeading): CharSequence {
+        val heading = createBibliographyHeading(node.title, node.isDecorative, context)
+        return heading.accept(this)
+    }
 
-            // Content.
-            +buildTag("div") {
-                classNames("bibliography", "bibliography-${node.style.name}")
-                node.bibliography.entries.values.mapIndexed { index, entry ->
-                    tag("span") {
-                        className("bibliography-entry-label")
-                        +node.style.labelProvider.getLabel(entry, index)
-                    }
-                    tag("span") {
-                        className("bibliography-entry-content")
-                        +node.style.contentProvider.getContent(entry)
-                    }
+    override fun visit(node: BibliographyView) =
+        buildTag("div") {
+            classNames("bibliography", "bibliography-${node.style.name}")
+            node.bibliography.entries.values.mapIndexed { index, entry ->
+                tag("span") {
+                    className("bibliography-entry-label")
+                    +node.style.labelProvider.getLabel(entry, index)
+                }
+                tag("span") {
+                    className("bibliography-entry-content")
+                    +node.style.contentProvider.getContent(entry)
                 }
             }
         }

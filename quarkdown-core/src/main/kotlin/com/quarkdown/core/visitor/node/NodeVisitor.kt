@@ -33,6 +33,7 @@ import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyHeading
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
@@ -174,6 +175,8 @@ interface NodeVisitor<T> {
     fun visit(node: TableOfContentsHeading): T
 
     fun visit(node: TableOfContentsView): T
+
+    fun visit(node: BibliographyHeading): T
 
     fun visit(node: BibliographyView): T
 

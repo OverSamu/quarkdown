@@ -41,6 +41,7 @@ import com.quarkdown.core.ast.base.inline.Text
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
+import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyHeading
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
 import com.quarkdown.core.ast.quarkdown.bibliography.createBibliographyHeading
 import com.quarkdown.core.ast.quarkdown.block.Box
@@ -234,15 +235,14 @@ class PlainTextNodeRenderer(
         return list.accept(this)
     }
 
+    override fun visit(node: BibliographyHeading): CharSequence {
+        val heading = createBibliographyHeading(node.title, node.isDecorative, context)
+        return heading.accept(this)
+    }
+
     override fun visit(node: BibliographyView): CharSequence {
         val builder = StringBuilder()
 
-        // Title.
-        createBibliographyHeading(node.title, node.isTitleDecorative, context)
-            .accept(this)
-            .let(builder::append)
-
-        // Content.
         node.bibliography.entries.values.forEachIndexed { index, entry ->
             builder.append(node.style.labelProvider.getLabel(entry, index))
             builder.append(" ")
