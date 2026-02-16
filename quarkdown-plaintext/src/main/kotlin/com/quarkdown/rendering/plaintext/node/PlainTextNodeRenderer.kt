@@ -219,7 +219,7 @@ class PlainTextNodeRenderer(
         val builder = StringBuilder()
 
         // Heading.
-        createTableOfContentsHeading(node, context)
+        createTableOfContentsHeading(node.title, context)
             ?.accept(this)
             ?.let(builder::append)
 

@@ -1,5 +1,6 @@
 package com.quarkdown.core.ast.quarkdown.block.toc
 
+import com.quarkdown.core.ast.InlineContent
 import com.quarkdown.core.ast.Node
 import com.quarkdown.core.ast.attributes.location.LocationTrackableNode
 import com.quarkdown.core.ast.base.block.Heading
@@ -114,7 +115,7 @@ fun convertTableOfContentsToListNode(
  * @returns a [Heading] node if a title is to be shown, or `null` otherwise.
  */
 fun createTableOfContentsHeading(
-    view: TableOfContentsView,
+    title: InlineContent?,
     context: Context,
 ): Node? {
     val isDocs = context.documentInfo.type == DocumentType.DOCS
@@ -123,13 +124,13 @@ fun createTableOfContentsHeading(
     val localizationKey = if (isDocs) "tableofcontents/docs" else "tableofcontents"
     val titleText = context.localizeOrNull(key = localizationKey)
 
-    if (view.title?.isEmpty() == true) {
+    if (title?.isEmpty() == true) {
         return null
     }
 
     return Heading(
         depth = if (isDocs) 3 else 1,
-        text = view.title ?: buildInline { titleText?.let { text(it) } },
+        text = title ?: buildInline { titleText?.let { text(it) } },
         customId = "table-of-contents",
     )
 }

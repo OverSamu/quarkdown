@@ -332,7 +332,7 @@ class QuarkdownHtmlNodeRenderer(
         val tableOfContents = context.attributes.tableOfContents ?: return ""
 
         return buildMultiTag {
-            createTableOfContentsHeading(node, context)?.let { +it }
+            createTableOfContentsHeading(node.title, context)?.let { +it }
 
             val tree: ListBlock =
                 convertTableOfContentsToListNode(
