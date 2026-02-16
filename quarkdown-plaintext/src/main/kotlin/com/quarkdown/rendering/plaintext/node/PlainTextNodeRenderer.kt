@@ -238,17 +238,13 @@ class PlainTextNodeRenderer(
         val builder = StringBuilder()
 
         // Title.
-        val title =
-            node.title
-                ?: context.localizeOrNull(key = "bibliography")?.let { buildInline { text(it) } }
+        val localizedTitle = context.localizeOrNull(key = "bibliography")
 
-        title?.let {
-            Heading(
-                depth = 1,
-                text = it,
-                isDecorative = node.isTitleDecorative,
-            ).accept(this).let(builder::append)
-        }
+        Heading(
+            depth = 1,
+            text = node.title ?: buildInline { localizedTitle?.let { text(it) } },
+            isDecorative = node.isTitleDecorative,
+        ).accept(this).let(builder::append)
 
         // Content.
         node.bibliography.entries.values.forEachIndexed { index, entry ->

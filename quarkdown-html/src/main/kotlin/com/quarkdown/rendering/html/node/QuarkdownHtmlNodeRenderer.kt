@@ -358,17 +358,15 @@ class QuarkdownHtmlNodeRenderer(
     override fun visit(node: BibliographyView) =
         buildMultiTag {
             // Localized title.
-            val titleText = context.localizeOrNull(key = "bibliography")
+            val localizedTitle = context.localizeOrNull(key = "bibliography")
 
             // Title heading. Its content is either the node's user-set title or a default localized one.
-            val title = node.title ?: titleText?.let { buildInline { text(it) } }
-            title?.let {
-                +Heading(
-                    depth = 1,
-                    text = it,
-                    isDecorative = node.isTitleDecorative,
-                )
-            }
+
+            +Heading(
+                depth = 1,
+                text = node.title ?: buildInline { localizedTitle?.let { text(it) } },
+                isDecorative = node.isTitleDecorative,
+            )
 
             // Content.
             +buildTag("div") {

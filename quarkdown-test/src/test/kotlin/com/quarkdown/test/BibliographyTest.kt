@@ -35,6 +35,10 @@ private const val PLAIN_BIBLIOGRAPHY_OUTPUT =
         "</span>" +
         "</div>"
 
+private const val PLAIN_BIBLIOGRAPHY_OUTPUT_EMPTY_TITLE =
+    "<h1 data-decorative=\"\"></h1>" +
+        PLAIN_BIBLIOGRAPHY_OUTPUT
+
 /**
  * Tests for bibliographies and citations.
  */
@@ -43,7 +47,7 @@ class BibliographyTest {
     fun `bibliography from bib file`() {
         execute(BIBLIOGRAPHY_CALL) {
             assertEquals(
-                PLAIN_BIBLIOGRAPHY_OUTPUT,
+                PLAIN_BIBLIOGRAPHY_OUTPUT_EMPTY_TITLE,
                 it,
             )
         }
@@ -88,7 +92,7 @@ class BibliographyTest {
         ) {
             assertEquals(
                 "<p>abc [1] def [2] ghi [3]</p>" +
-                    PLAIN_BIBLIOGRAPHY_OUTPUT +
+                    PLAIN_BIBLIOGRAPHY_OUTPUT_EMPTY_TITLE +
                     "<p>abc [1] def [2] ghi [3]</p>",
                 it,
             )
@@ -109,6 +113,7 @@ class BibliographyTest {
         ) {
             assertEquals(
                 "abc [1] def [2] ghi [3]\n\n" +
+                    "\n\n" +
                     "[1] Albert Einstein. Zur Elektrodynamik bewegter Körper. (German) " +
                     "[On the electrodynamics of moving bodies]. Annalen der Physik, 322(10):891–921, 1905.\n" +
                     "[2] Michel Goossens, Frank Mittelbach, and Alexander Samarin. The LaTeX Companion. " +
@@ -128,7 +133,7 @@ class BibliographyTest {
         ) {
             assertEquals(
                 "<p>abc [???]</p>" +
-                    PLAIN_BIBLIOGRAPHY_OUTPUT,
+                    PLAIN_BIBLIOGRAPHY_OUTPUT_EMPTY_TITLE,
                 it,
             )
         }
