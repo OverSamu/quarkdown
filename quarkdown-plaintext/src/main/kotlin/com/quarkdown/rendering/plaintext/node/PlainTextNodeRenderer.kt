@@ -59,6 +59,7 @@ import com.quarkdown.core.ast.quarkdown.block.SlidesFragment
 import com.quarkdown.core.ast.quarkdown.block.SlidesSpeakerNote
 import com.quarkdown.core.ast.quarkdown.block.Stacked
 import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
+import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsHeading
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertTableOfContentsToListNode
 import com.quarkdown.core.ast.quarkdown.block.toc.createTableOfContentsHeading
@@ -213,17 +214,14 @@ class PlainTextNodeRenderer(
 
     override fun visit(node: NavigationContainer) = node.visitChildren()
 
+    override fun visit(node: TableOfContentsHeading): CharSequence {
+        val heading = createTableOfContentsHeading(node.title, context)
+        return heading?.accept(this) ?: ""
+    }
+
     override fun visit(node: TableOfContentsView): CharSequence {
         val tableOfContents = context.attributes.tableOfContents ?: return ""
 
-        val builder = StringBuilder()
-
-        // Heading.
-        createTableOfContentsHeading(node.title, context)
-            ?.accept(this)
-            ?.let(builder::append)
-
-        // Content.
         val list =
             convertTableOfContentsToListNode(
                 node,
@@ -233,9 +231,7 @@ class PlainTextNodeRenderer(
                 wrapLinksInParagraphs = true,
                 linkUrlMapper = { "" },
             )
-        list.accept(this).let(builder::append)
-
-        return builder.toString().blockNode
+        return list.accept(this)
     }
 
     override fun visit(node: BibliographyView): CharSequence {

@@ -24,6 +24,7 @@ import com.quarkdown.core.ast.dsl.buildBlocks
 import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Math
+import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsHeading
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.MathSpan
 import com.quarkdown.core.context.Context
@@ -425,9 +426,13 @@ class PlainTextNodeRendererTest {
         assertEquals(
             "Table of Contents\n\n" +
                 "1. Welcome\n2. Introduction\n\t1. Getting Started\n\n",
-            TableOfContentsView(
-                title = buildInline { text("Table of Contents") },
-                maxDepth = 3,
+            AstRoot(
+                listOf(
+                    TableOfContentsHeading(buildInline { text("Table of Contents") }),
+                    TableOfContentsView(
+                        maxDepth = 3,
+                    ),
+                ),
             ).render(context),
         )
     }

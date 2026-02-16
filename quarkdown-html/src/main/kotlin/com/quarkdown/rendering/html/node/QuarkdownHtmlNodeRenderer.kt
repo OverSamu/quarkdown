@@ -40,6 +40,7 @@ import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.TableOfContentsItemVariant
+import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsHeading
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.block.toc.convertTableOfContentsToListNode
 import com.quarkdown.core.ast.quarkdown.block.toc.createTableOfContentsHeading
@@ -328,12 +329,15 @@ class QuarkdownHtmlNodeRenderer(
             +node.children
         }
 
+    override fun visit(node: TableOfContentsHeading): CharSequence {
+        val heading = createTableOfContentsHeading(node.title, context)
+        return heading?.accept(this) ?: ""
+    }
+
     override fun visit(node: TableOfContentsView): CharSequence {
         val tableOfContents = context.attributes.tableOfContents ?: return ""
 
         return buildMultiTag {
-            createTableOfContentsHeading(node.title, context)?.let { +it }
-
             val tree: ListBlock =
                 convertTableOfContentsToListNode(
                     node,

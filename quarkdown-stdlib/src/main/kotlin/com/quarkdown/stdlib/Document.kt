@@ -1,10 +1,12 @@
 package com.quarkdown.stdlib
 
+import com.quarkdown.core.ast.AstRoot
 import com.quarkdown.core.ast.InlineMarkdownContent
 import com.quarkdown.core.ast.MarkdownContent
 import com.quarkdown.core.ast.base.block.Heading
 import com.quarkdown.core.ast.quarkdown.block.Container
 import com.quarkdown.core.ast.quarkdown.block.NavigationContainer
+import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsHeading
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.LastHeading
 import com.quarkdown.core.ast.quarkdown.inline.PageCounter
@@ -1011,9 +1013,13 @@ fun tableOfContents(
     @Name("includeunnumbered") includeUnnumbered: Boolean = false,
     @Name("focus") focusedItem: InlineMarkdownContent? = null,
 ): NodeValue =
-    TableOfContentsView(
-        title?.children,
-        maxDepth,
-        includeUnnumbered,
-        focusedItem?.children,
+    AstRoot(
+        listOf(
+            TableOfContentsHeading(title?.children),
+            TableOfContentsView(
+                maxDepth,
+                includeUnnumbered,
+                focusedItem?.children,
+            ),
+        ),
     ).wrappedAsValue()

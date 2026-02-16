@@ -61,6 +61,7 @@ import com.quarkdown.core.ast.quarkdown.block.SubdocumentGraph
 import com.quarkdown.core.ast.quarkdown.block.list.FocusListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.LocationTargetListItemVariant
 import com.quarkdown.core.ast.quarkdown.block.list.TableOfContentsItemVariant
+import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsHeading
 import com.quarkdown.core.ast.quarkdown.block.toc.TableOfContentsView
 import com.quarkdown.core.ast.quarkdown.inline.IconImage
 import com.quarkdown.core.ast.quarkdown.inline.InlineCollapse
@@ -393,6 +394,8 @@ open class BaseHtmlNodeRenderer(
     override fun visit(node: Whitespace): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: NavigationContainer): CharSequence = throw UnsupportedRenderException(node)
+
+    override fun visit(node: TableOfContentsHeading): CharSequence = throw UnsupportedRenderException(node)
 
     override fun visit(node: TableOfContentsView): CharSequence = throw UnsupportedRenderException(node)
 
