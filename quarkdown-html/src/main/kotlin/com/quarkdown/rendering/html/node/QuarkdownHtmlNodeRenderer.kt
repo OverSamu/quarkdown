@@ -16,11 +16,11 @@ import com.quarkdown.core.ast.base.block.Table
 import com.quarkdown.core.ast.base.block.list.ListBlock
 import com.quarkdown.core.ast.base.inline.CodeSpan
 import com.quarkdown.core.ast.base.inline.Text
-import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
+import com.quarkdown.core.ast.quarkdown.bibliography.createBibliographyHeading
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
@@ -357,16 +357,8 @@ class QuarkdownHtmlNodeRenderer(
 
     override fun visit(node: BibliographyView) =
         buildMultiTag {
-            // Localized title.
-            val localizedTitle = context.localizeOrNull(key = "bibliography")
-
             // Title heading. Its content is either the node's user-set title or a default localized one.
-
-            +Heading(
-                depth = 1,
-                text = node.title ?: buildInline { localizedTitle?.let { text(it) } },
-                isDecorative = node.isTitleDecorative,
-            )
+            createBibliographyHeading(node.title, node.isTitleDecorative, context).let { +it }
 
             // Content.
             +buildTag("div") {

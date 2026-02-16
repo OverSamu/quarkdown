@@ -38,11 +38,11 @@ import com.quarkdown.core.ast.base.inline.Strong
 import com.quarkdown.core.ast.base.inline.StrongEmphasis
 import com.quarkdown.core.ast.base.inline.SubdocumentLink
 import com.quarkdown.core.ast.base.inline.Text
-import com.quarkdown.core.ast.dsl.buildInline
 import com.quarkdown.core.ast.quarkdown.CaptionableNode
 import com.quarkdown.core.ast.quarkdown.FunctionCallNode
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyCitation
 import com.quarkdown.core.ast.quarkdown.bibliography.BibliographyView
+import com.quarkdown.core.ast.quarkdown.bibliography.createBibliographyHeading
 import com.quarkdown.core.ast.quarkdown.block.Box
 import com.quarkdown.core.ast.quarkdown.block.Clipped
 import com.quarkdown.core.ast.quarkdown.block.Collapse
@@ -238,13 +238,9 @@ class PlainTextNodeRenderer(
         val builder = StringBuilder()
 
         // Title.
-        val localizedTitle = context.localizeOrNull(key = "bibliography")
-
-        Heading(
-            depth = 1,
-            text = node.title ?: buildInline { localizedTitle?.let { text(it) } },
-            isDecorative = node.isTitleDecorative,
-        ).accept(this).let(builder::append)
+        createBibliographyHeading(node.title, node.isTitleDecorative, context)
+            .accept(this)
+            .let(builder::append)
 
         // Content.
         node.bibliography.entries.values.forEachIndexed { index, entry ->
